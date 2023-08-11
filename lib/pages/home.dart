@@ -7,6 +7,8 @@ import '../main.dart';
 import '../components/select.dart';
 import '../components/config_type.dart';
 
+typedef SelectType = List<dynamic>;
+
 class Home extends StatelessWidget {
   Home({super.key});
 
@@ -14,16 +16,14 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var appState = context.watch<MyAppState>();
-    Map allConfig = appState.config;
+    ConfigType allConfig = appState.config;
 
     var depart = '';
     var departId;
-    List <dynamic> departList = [];
-    if(allConfig.isNotEmpty) {
-      List <Departments> departs = allConfig['departments'];
-      print(2222);
-      print(allConfig);
-      print(depart);
+    SelectType departList = [];
+    if(allConfig.padId != 0) {
+      List <Departments> departs = allConfig.departments;
+      departList = departs.map((e) => (name: e.departmentName, value: e.dpartmentId)).toList();
     }
 
     void updateDepart(current) {
@@ -31,7 +31,7 @@ class Home extends StatelessWidget {
     }
 
     () async {
-      if(allConfig.isEmpty) {
+      if(allConfig.padId == 0) {
         var status = await Permission.storage.status;
         if(status.isGranted) {
           File file = File('/storage/emulated/0/export_test/config');
@@ -40,11 +40,8 @@ class Home extends StatelessWidget {
             var jsonStr = await file.readAsString();
             var config = convert.jsonDecode(jsonStr);
             print(config);
-            ConfigType obj = ConfigType.fromJson(config);
-            Map<String, dynamic> map = obj.toJson();
-            print(11111);
-            print(map);
-            appState.updateConfig(map);
+            ConfigType obj = ConfigType.fromJson(convert.jsonDecode(jsonStr));
+            appState.updateConfig(obj);
           } else {
             // 不存在则提示
           }
@@ -62,7 +59,7 @@ class Home extends StatelessWidget {
                 style: TextStyle(fontSize: 24),
               )
             ),
-            // CustomSelect(selected: depart = '', selectList: departList)
+            CustomSelect(selected: depart = '', selectList: departList)
           ],
         ),
       )

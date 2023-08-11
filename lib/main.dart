@@ -28,10 +28,17 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  ConfigType config = {} as ConfigType;
+  ConfigType config = ConfigType(0, []);
 
-  void updateConfig(current) {
+  void updateConfig(ConfigType current) {
     config = current;
+    notifyListeners();
+  }
+
+  int departId = 0;
+
+  void updateDepartId(int id) {
+    departId = id;
     notifyListeners();
   }
 }

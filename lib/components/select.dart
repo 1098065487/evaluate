@@ -5,7 +5,7 @@ class CustomSelect extends StatelessWidget {
   CustomSelect({required this.selected, required this.selectList, super.key});
 
   final String selected;
-  final List<dynamic> selectList;
+  final List <dynamic> selectList;
   // void updateSelect;
 
   @override
