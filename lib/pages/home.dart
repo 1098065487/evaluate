@@ -7,8 +7,6 @@ import '../main.dart';
 import '../components/select.dart';
 import '../components/config_type.dart';
 
-typedef SelectType = List<dynamic>;
-
 class Home extends StatelessWidget {
   Home({super.key});
 
@@ -17,17 +15,20 @@ class Home extends StatelessWidget {
 
     var appState = context.watch<MyAppState>();
     ConfigType allConfig = appState.config;
-
-    var depart = '';
-    var departId;
-    SelectType departList = [];
+    Map <String, dynamic> depart = appState.departSelected;
+    Map <String, dynamic> subject = appState.subjectSelected;
+    
+    var departList = [];
     if(allConfig.padId != 0) {
       List <Departments> departs = allConfig.departments;
       departList = departs.map((e) => (name: e.departmentName, value: e.dpartmentId)).toList();
     }
 
-    void updateDepart(current) {
-      depart = current;
+    var subjectList = [];
+    if(depart.isNotEmpty) {
+      List <Departments> departs = allConfig.departments;
+      List <Departments> selected = departs.where((element) => element.dpartmentId == depart['value']).toList();
+      subjectList = selected[0].subject.map((e) => (name: e.subjectName, value: e.subjectId)).toList();
     }
 
     () async {
@@ -50,16 +51,43 @@ class Home extends StatelessWidget {
     }(); 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 80.0),
+        padding: EdgeInsets.symmetric(vertical: 100.0),
         child: Column(
           children: [
             Center(
               child: Text(
                 '领导干部测评系统PAD版',
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 25),
               )
             ),
-            CustomSelect(selected: depart = '', selectList: departList)
+            SizedBox(height: 40,),
+            Container(
+              width: MediaQuery.of(context).size.width - 140,
+              margin: EdgeInsets.symmetric(vertical: 20.0),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(0, 0, 0, 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CustomSelect(selected: depart, selectList: departList, type: 'depart'),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width - 140,
+              margin: EdgeInsets.symmetric(vertical: 5.0),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(0, 0, 0, 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CustomSelect(selected: subject, selectList: subjectList, type: 'subject'),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width - 140,
+              margin: EdgeInsets.symmetric(vertical: 20.0),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(0, 0, 0, 0.08),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: CustomSelect(selected: depart, selectList: departList, type: 'ticket'),
+            ),
           ],
         ),
       )

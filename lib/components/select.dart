@@ -1,35 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pickers/pickers.dart';
+import 'package:flutter_pickers/style/picker_style.dart';
+import 'package:provider/provider.dart';
+import '../main.dart';
 
 class CustomSelect extends StatelessWidget {
-  CustomSelect({required this.selected, required this.selectList, super.key});
+  CustomSelect({required this.selected, required this.selectList, required this.type, super.key});
 
-  final String selected;
+  final Map<String, dynamic> selected;
   final List <dynamic> selectList;
-  // void updateSelect;
+  final String type;
 
-  @override
+  String renderTips(String type) {
+    switch(type) {
+      case 'depart':
+        return '请选择部门';
+      case 'subject':
+        return '请选择持票层面';
+      case 'ticket':
+        return '请选择持票种';
+      default: 
+        return '请选择';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
     return GestureDetector(
       onTap: () {
-        print('11111');
         Pickers.showSinglePicker(context,
-          data: selectList,
-          selectData: selected,
+          data: selectList.map((e) => e.name).toList(),
+          selectData: selected['name'],
+          pickerStyle: PickerStyle(
+            textColor: Colors.black,
+            textSize: 17,
+          ),
           onConfirm: (p, position) {
-            print(p);
+            Map<String, dynamic> handleSelected = {
+              'name': p,
+              'value': selectList[position].value,
+            };
+            if(type == 'depart') {
+              appState.updateDepartSelected(handleSelected);
+              appState.updateSubjectSelected({});
+            } else if(type == 'subject') {
+              appState.updateSubjectSelected(handleSelected);
+            }
           }, 
-          // onChanged: (p) => print('数据发生改变：$p')
         );
       },
       child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.lightBlue,
-            borderRadius: BorderRadius.circular(8),
+          padding: const EdgeInsets.all(10),
+          child: Text(
+              selected.isNotEmpty ? selected['name'] : renderTips(type),
           ),
-          child: const Text('My Button'),
         )
     );
   }

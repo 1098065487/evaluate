@@ -35,10 +35,17 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  int departId = 0;
+  Map<String, dynamic> departSelected = {};
 
-  void updateDepartId(int id) {
-    departId = id;
+  void updateDepartSelected(Map <String, dynamic> current) {
+    departSelected = current;
+    notifyListeners();
+  }
+
+  Map<String, dynamic> subjectSelected = {};
+
+  void updateSubjectSelected(Map <String, dynamic> current) {
+    subjectSelected = current;
     notifyListeners();
   }
 }
