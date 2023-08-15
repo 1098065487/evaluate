@@ -15,8 +15,13 @@ class Home extends StatelessWidget {
 
     var appState = context.watch<MyAppState>();
     ConfigType allConfig = appState.config;
-    Map <String, dynamic> depart = appState.departSelected;
-    Map <String, dynamic> subject = appState.subjectSelected;
+    Map<String, dynamic> depart = appState.departSelected;
+    Map<String, dynamic> subject = appState.subjectSelected;
+    Map<String, dynamic> ticket = appState.ticketSelected;
+
+    print(depart);
+    print(subject);
+    print(ticket['value']);
     
     var departList = [];
     if(allConfig.padId != 0) {
@@ -31,6 +36,14 @@ class Home extends StatelessWidget {
       subjectList = selected[0].subject.map((e) => (name: e.subjectName, value: e.subjectId)).toList();
     }
 
+    var ticketList = [];
+    if(subject.isNotEmpty) {
+      List <Departments> departs = allConfig.departments;
+      List <Departments> filterDepart = departs.where((element) => element.dpartmentId == depart['value']).toList();
+      List<Subject> selected = filterDepart[0].subject.where((element) => element.subjectId == subject['value']).toList();
+      ticketList = selected[0].ticketTypeArr.map((e) => (name: e.ticketType, value: e.pdss)).toList();
+    }
+
     () async {
       if(allConfig.padId == 0) {
         var status = await Permission.storage.status;
@@ -40,8 +53,7 @@ class Home extends StatelessWidget {
             // 存在则可操作
             var jsonStr = await file.readAsString();
             var config = convert.jsonDecode(jsonStr);
-            print(config);
-            ConfigType obj = ConfigType.fromJson(convert.jsonDecode(jsonStr));
+            ConfigType obj = ConfigType.fromJson(config);
             appState.updateConfig(obj);
           } else {
             // 不存在则提示
@@ -62,31 +74,31 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 40,),
             Container(
-              width: MediaQuery.of(context).size.width - 140,
+              width: MediaQuery.of(context).size.width - 110,
               margin: EdgeInsets.symmetric(vertical: 20.0),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.08),
-                borderRadius: BorderRadius.circular(8),
+                color: Color.fromRGBO(160, 160, 160, 0.15),
+                borderRadius: BorderRadius.circular(32),
               ),
               child: CustomSelect(selected: depart, selectList: departList, type: 'depart'),
             ),
             Container(
-              width: MediaQuery.of(context).size.width - 140,
+              width: MediaQuery.of(context).size.width - 110,
               margin: EdgeInsets.symmetric(vertical: 5.0),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.08),
-                borderRadius: BorderRadius.circular(8),
+                color: Color.fromRGBO(160, 160, 160, 0.15),
+                borderRadius: BorderRadius.circular(32),
               ),
               child: CustomSelect(selected: subject, selectList: subjectList, type: 'subject'),
             ),
             Container(
-              width: MediaQuery.of(context).size.width - 140,
+              width: MediaQuery.of(context).size.width - 110,
               margin: EdgeInsets.symmetric(vertical: 20.0),
               decoration: BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.08),
-                borderRadius: BorderRadius.circular(8),
+                color: Color.fromRGBO(160, 160, 160, 0.15),
+                borderRadius: BorderRadius.circular(32),
               ),
-              child: CustomSelect(selected: depart, selectList: departList, type: 'ticket'),
+              child: CustomSelect(selected: ticket, selectList: ticketList, type: 'ticket'),
             ),
           ],
         ),

@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         title: 'Evaluate App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         ),
         home: Home(),
       ),
@@ -46,6 +46,13 @@ class MyAppState extends ChangeNotifier {
 
   void updateSubjectSelected(Map <String, dynamic> current) {
     subjectSelected = current;
+    notifyListeners();
+  }
+
+  Map<String, dynamic> ticketSelected = {};
+
+  void updateTicketSelected(Map<String, dynamic> current) {
+    ticketSelected = current;
     notifyListeners();
   }
 }
