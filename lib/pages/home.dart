@@ -18,6 +18,7 @@ class Home extends StatelessWidget {
     Map<String, dynamic> depart = appState.departSelected;
     Map<String, dynamic> subject = appState.subjectSelected;
     Map<String, dynamic> ticket = appState.ticketSelected;
+    String roleType = appState.roleType;
 
     print(depart);
     print(subject);
@@ -73,33 +74,31 @@ class Home extends StatelessWidget {
               )
             ),
             SizedBox(height: 40,),
-            Container(
-              width: MediaQuery.of(context).size.width - 110,
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(160, 160, 160, 0.15),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: CustomSelect(selected: depart, selectList: departList, type: 'depart'),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width - 110,
-              margin: EdgeInsets.symmetric(vertical: 5.0),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(160, 160, 160, 0.15),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: CustomSelect(selected: subject, selectList: subjectList, type: 'subject'),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width - 110,
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(160, 160, 160, 0.15),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: CustomSelect(selected: ticket, selectList: ticketList, type: 'ticket'),
-            ),
+            CustomSelect(selected: depart, selectList: departList, type: 'depart'),
+            CustomSelect(selected: subject, selectList: subjectList, type: 'subject'),
+            CustomSelect(selected: ticket, selectList: ticketList, type: 'ticket'),
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Radio(
+                      value: 'new', 
+                      groupValue: roleType, 
+                      onChanged: (val) => {
+                        print(val),
+                        if(val!.isNotEmpty) {
+                          appState.updateRoleType(val)
+                        }
+                      }
+                    ),
+                    Text('new')
+                  ],
+                )
+              ],
+            )
           ],
         ),
       )

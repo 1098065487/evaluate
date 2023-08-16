@@ -90,6 +90,12 @@ class CustomSelect extends StatelessWidget {
         }
       },
       child: Container(
+          width: MediaQuery.of(context).size.width - 110,
+          margin: EdgeInsets.symmetric(vertical: 10.0),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(160, 160, 160, 0.15),
+            borderRadius: BorderRadius.circular(32),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
