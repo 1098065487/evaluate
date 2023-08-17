@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './test/file_picker.dart';
 import './pages/home.dart';
+import './pages/evalueate.dart';
 import './components/config_type.dart';
 
 void main() {
@@ -19,8 +20,12 @@ class MyApp extends StatelessWidget {
         title: 'Evaluate App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+          primaryColor: Color(0xFF1890ff),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1890ff)),
         ),
+        routes: {
+          'evaluate': (context) => Evaluate(), 
+        },
         home: Home(),
       ),
     );

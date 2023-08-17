@@ -31,7 +31,6 @@ class CustomSelect extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        print(11111);
         if(appState.config.padId == 0) {
           Fluttertoast.showToast(
             msg: "请先导入配置",
@@ -90,7 +89,7 @@ class CustomSelect extends StatelessWidget {
         }
       },
       child: Container(
-          width: MediaQuery.of(context).size.width - 110,
+          width: 280,
           margin: EdgeInsets.symmetric(vertical: 10.0),
           decoration: BoxDecoration(
             color: Color.fromRGBO(160, 160, 160, 0.15),

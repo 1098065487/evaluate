@@ -1,3 +1,4 @@
+import 'package:evaluate/components/radio.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
@@ -18,7 +19,6 @@ class Home extends StatelessWidget {
     Map<String, dynamic> depart = appState.departSelected;
     Map<String, dynamic> subject = appState.subjectSelected;
     Map<String, dynamic> ticket = appState.ticketSelected;
-    String roleType = appState.roleType;
 
     print(depart);
     print(subject);
@@ -64,6 +64,9 @@ class Home extends StatelessWidget {
     }(); 
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
         padding: EdgeInsets.symmetric(vertical: 100.0),
         child: Column(
           children: [
@@ -77,27 +80,55 @@ class Home extends StatelessWidget {
             CustomSelect(selected: depart, selectList: departList, type: 'depart'),
             CustomSelect(selected: subject, selectList: subjectList, type: 'subject'),
             CustomSelect(selected: ticket, selectList: ticketList, type: 'ticket'),
-            SizedBox(height: 20,),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Radio(
-                      value: 'new', 
-                      groupValue: roleType, 
-                      onChanged: (val) => {
-                        print(val),
-                        if(val!.isNotEmpty) {
-                          appState.updateRoleType(val)
-                        }
-                      }
-                    ),
-                    Text('new')
-                  ],
-                )
+                CustomRadio(radioValue: 'last', radioName: '继续上次身份打分'),
+                CustomRadio(radioValue: 'new', radioName: '使用新身份打分'),
               ],
+            ),
+            SizedBox(height: 40,),
+            ElevatedButton(
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(Size(280, 30)),
+                foregroundColor: MaterialStateProperty.all(Color(0xFFFFFFFF)),
+                backgroundColor: MaterialStateProperty.all(Color(0xFF1890ff)),
+                padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 10, horizontal: 20)),
+                textStyle: MaterialStateProperty.all(
+                  TextStyle(
+                    fontSize: 15,
+                  )
+                )
+              ),
+              child: Text('登 录'),
+              onPressed: () => {
+                print(appState.roleType),
+                Navigator.of(context).pushNamed("evaluate")
+              },
+            ),
+            SizedBox(height: 120,),
+            TextButton(
+              onPressed: () => {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                      return AlertDialog(
+                          title: const Text("提示"),
+                          content: const Text("确定删除吗？"),
+                          actions: [
+                              TextButton(
+                                  onPressed: () {
+                                      Navigator.of(context).pop();
+                                  },
+                                  child: const Text("取消"),
+                              ),
+                              TextButton(onPressed: () {}, child: const Text("确定")),
+                          ],
+                      );
+                  },
+                )
+              }, 
+              child: Text('导入配置文件')
             )
           ],
         ),
